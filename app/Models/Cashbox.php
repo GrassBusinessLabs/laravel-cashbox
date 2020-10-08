@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Cashbox extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'model',
+        'city',
+        'number'
+    ];
 }
