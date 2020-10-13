@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Cashbox;
+use App\Models\Amount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CashboxFactory extends Factory
+class AmountFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Cashbox::class;
+    protected $model = Amount::class;
 
     /**
      * Define the model's default state.
@@ -22,9 +22,8 @@ class CashboxFactory extends Factory
     public function definition()
     {
         return [
-            'model' => $this->faker->lexify(),
-            'city' => $this->faker->city,
-            'number' => $this->faker->numerify('####')
+            'value' => $this->faker->randomElement(Amount::VALUES),
+            'quantity' => $this->faker->numberBetween(0, 10)
         ];
     }
 }

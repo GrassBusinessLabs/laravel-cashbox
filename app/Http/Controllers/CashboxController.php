@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Cashbox\StoreRequest;
+use App\Http\Requests\Cashbox\UpdateRequest;
 use App\Models\Cashbox;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CashboxController extends Controller
 {
@@ -15,21 +16,22 @@ class CashboxController extends Controller
      */
     public function index()
     {
-       $cashboxes = Cashbox::all();
+        $cashboxes = Cashbox::all();
+       // $cashboxes = Cashbox::with('amounts')->get();
        return response()->json($cashboxes);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $cashbox = Cashbox::create($request->all());
+        $cashbox = Cashbox::create($request->validated());
 
-        return response()->json($cashbox);
+        return response()->json($cashbox, 201);
     }
 
     /**
@@ -46,13 +48,13 @@ class CashboxController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param UpdateRequest $request
      * @param Cashbox $cashbox
      * @return JsonResponse
      */
-    public function update(Request $request, Cashbox $cashbox)
+    public function update(UpdateRequest $request, Cashbox $cashbox)
     {
-        $cashbox->update($request->all());
+        $cashbox->update($request->validated());
 
         return response()->json($cashbox);
     }
@@ -67,6 +69,6 @@ class CashboxController extends Controller
     {
         $cashbox->delete();
 
-        return response()->json(['message'=> 'Deleted']);
+        return response()->json(['message'=> 'Deleted'], 204);
     }
 }
