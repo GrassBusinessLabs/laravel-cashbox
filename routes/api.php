@@ -18,4 +18,6 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::get('test', [CashboxController::class, 'test']);
+
 Route::apiResource('cashboxes', CashboxController::class);

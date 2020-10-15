@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Cashbox\StoreRequest;
 use App\Http\Requests\Cashbox\UpdateRequest;
+use App\Http\Resources\CashboxResource;
+use App\Http\Resources\CashboxResourceCollection;
 use App\Models\Cashbox;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CashboxController extends Controller
@@ -12,13 +15,13 @@ class CashboxController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return CashboxResourceCollection
      */
     public function index()
     {
-        $cashboxes = Cashbox::all();
-       // $cashboxes = Cashbox::with('amounts')->get();
-       return response()->json($cashboxes);
+        // $cashboxes = Cashbox::all();
+       $cashboxes = Cashbox::with('amounts')->paginate(5);
+       return CashboxResourceCollection::make($cashboxes);
     }
 
     /**
@@ -38,11 +41,12 @@ class CashboxController extends Controller
      * Display the specified resource.
      *
      * @param Cashbox $cashbox
-     * @return JsonResponse
+     * @return CashboxResource
      */
     public function show(Cashbox $cashbox)
     {
-        return response()->json($cashbox);
+        $cashbox->load(['amounts']);
+        return CashboxResource::make($cashbox);
     }
 
     /**
@@ -64,11 +68,17 @@ class CashboxController extends Controller
      *
      * @param Cashbox $cashbox
      * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Cashbox $cashbox)
     {
         $cashbox->delete();
 
         return response()->json(['message'=> 'Deleted'], 204);
+    }
+
+    public function test()
+    {
+        return [];
     }
 }

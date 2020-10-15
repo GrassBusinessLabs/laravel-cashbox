@@ -5,6 +5,7 @@ namespace App\Models;
 use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,7 +21,7 @@ class Cashbox extends Model
 
     protected $appends = [
         // 'balance'
-        // 'full_model'
+        'full_model'
     ];
 
     // Accessors
@@ -28,6 +29,13 @@ class Cashbox extends Model
     public function getFullModelAttribute()
     {
         return "$this->model $this->number";
+    }
+
+    // Mutator
+
+    public function setFullModelAttribute($value)
+    {
+        $this->attributes['model'] = $value;
     }
 
     /**
@@ -48,5 +56,13 @@ class Cashbox extends Model
     public function amounts()
     {
         return $this->hasMany(Amount::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function banks()
+    {
+        return $this->belongsToMany(Bank::class)->withTimestamps();
     }
 }

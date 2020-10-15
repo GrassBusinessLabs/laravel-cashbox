@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Amount;
+use App\Models\Bank;
 use App\Models\Cashbox;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
 class CashboxSeeder extends Seeder
@@ -16,21 +15,12 @@ class CashboxSeeder extends Seeder
      */
     public function run()
     {
-        Cashbox::factory()->count(10)->create();
-
-
-
-        // ->has(
-        //     Amount::factory()
-        //         ->count(8)
-        //         ->state(
-        //             new Sequence(
-        //                 ...array_map(function ($value) {
-        //                     return ['value' => $value];
-        //                 }, Amount::VALUES)
-        //             )
-        //         )
-        // )
-        // ->create();
+        Cashbox::factory()
+            ->count(10)
+            ->create()
+            ->each(function (Cashbox $cashbox) {
+                $banks = Bank::inRandomOrder()->take(2)->get();
+                $cashbox->banks()->attach($banks);
+            });
     }
 }
