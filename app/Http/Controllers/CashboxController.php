@@ -20,8 +20,11 @@ class CashboxController extends Controller
     public function index()
     {
         // $cashboxes = Cashbox::all();
-       $cashboxes = Cashbox::with('amounts')->paginate(5);
-       return CashboxResourceCollection::make($cashboxes);
+       $cashboxes = Cashbox::/*with('amounts')->*/paginate(5);
+       // return CashboxResourceCollection::make($cashboxes);
+       return CashboxResourceCollection::make($cashboxes)->toArray(null);
+       // return $this->success(CashboxResourceCollection::make($cashboxes));
+       // return CashboxResource::collection($cashboxes);
     }
 
     /**

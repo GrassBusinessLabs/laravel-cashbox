@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CashboxController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,22 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+// Auth routes
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('register', [AuthController::class, 'register'])->name('auth.register');
+    Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+});
+
+// Public routes
 Route::get('test', [CashboxController::class, 'test']);
 
+// Authenticated users
+Route::group(['middleware' => 'auth:sanctum'], function () {
+
 Route::apiResource('cashboxes', CashboxController::class);
+
+});
+
+// Fallback route
+Route::fallback([AuthController::class, 'fallback']);
