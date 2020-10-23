@@ -3,9 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
@@ -27,7 +25,7 @@ class UserFactory extends Factory
             'name' => $this->faker->name,
             'age' => $this->faker->numberBetween(15, 20),
             'email' => $this->faker->unique()->safeEmail,
-            'password' => Hash::make('123456'),
+            'password' => '123456',
         ];
     }
 }
