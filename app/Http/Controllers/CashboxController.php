@@ -12,18 +12,23 @@ use Illuminate\Http\JsonResponse;
 
 class CashboxController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Cashbox::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return CashboxResourceCollection
+     * @return JsonResponse
      */
     public function index()
     {
         // $cashboxes = Cashbox::all();
        $cashboxes = Cashbox::/*with('amounts')->*/paginate(5);
        // return CashboxResourceCollection::make($cashboxes);
-       return CashboxResourceCollection::make($cashboxes)->toArray(null);
-       // return $this->success(CashboxResourceCollection::make($cashboxes));
+       // return CashboxResourceCollection::make($cashboxes)->toArray(null);
+       return $this->success(CashboxResourceCollection::make($cashboxes));
        // return CashboxResource::collection($cashboxes);
     }
 
@@ -82,6 +87,9 @@ class CashboxController extends Controller
 
     public function test()
     {
-        return [];
+        $result = Cashbox::whereHas('amounts', function ($query){
+            $query->where('quantity', '>', 5);
+        })->where('model','like', '%a%')->orderBy('number')->latest()->dump()->get();
+        dd($result);
     }
 }

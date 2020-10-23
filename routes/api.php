@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 // Auth routes
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register'])->name('auth.register');
@@ -30,7 +26,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::get('test', [CashboxController::class, 'test']);
 
 // Authenticated users
-Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::group(['middleware' => ['auth:sanctum', 'age:18']], function () {
 
 Route::apiResource('cashboxes', CashboxController::class);
 
